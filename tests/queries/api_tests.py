@@ -21,6 +21,7 @@ import json
 import random
 import string
 
+from freezegun import freeze_time
 import pytest
 import prison
 from sqlalchemy.sql import func
@@ -326,19 +327,20 @@ class TestQueryApi(SupersetTestCase):
         Query API: Test get list query filter changed_on
         """
         self.login(username="admin")
-        now_time = datetime.now()
-        yesterday_time = now_time - timedelta(days=1)
-        arguments = {
-            "filters": [
-                {"col": "changed_on", "opr": "lt", "value": str(now_time)},
-                {"col": "changed_on", "opr": "gt", "value": str(yesterday_time)},
-            ]
-        }
-        uri = f"api/v1/query/?q={prison.dumps(arguments)}"
-        rv = self.client.get(uri)
-        assert rv.status_code == 200
-        data = json.loads(rv.data.decode("utf-8"))
-        assert data["count"] == QUERIES_FIXTURE_COUNT
+        with freeze_time("2020-01-01T00:00:00Z"):
+            now_time = datetime.now()
+            yesterday_time = now_time - timedelta(days=1)
+            arguments = {
+                "filters": [
+                    {"col": "changed_on", "opr": "lt", "value": str(now_time)},
+                    {"col": "changed_on", "opr": "gt", "value": str(yesterday_time)},
+                ]
+            }
+            uri = f"api/v1/query/?q={prison.dumps(arguments)}"
+            rv = self.client.get(uri)
+            assert rv.status_code == 200
+            data = json.loads(rv.data.decode("utf-8"))
+            assert data["count"] == QUERIES_FIXTURE_COUNT
 
     @pytest.mark.usefixtures("create_queries")
     def test_get_list_query_order(self):
