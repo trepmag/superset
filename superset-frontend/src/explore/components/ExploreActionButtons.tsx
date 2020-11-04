@@ -25,6 +25,7 @@ import copyTextToClipboard from 'src/utils/copy';
 import withToasts from 'src/messageToasts/enhancers/withToasts';
 import { useUrlShortener } from 'src/common/hooks/useUrlShortener';
 import EmbedCodeButton from './EmbedCodeButton';
+import DisplayApiButton from './DisplayApiButton';
 import ConnectedDisplayQueryButton from './DisplayQueryButton';
 import { exportChart, getExploreLongUrl } from '../exploreUtils';
 
@@ -171,6 +172,7 @@ const ExploreActionButtons = (props: ExploreActionButtonsProps) => {
             onClick={doShareEmail}
           />
           <EmbedCodeButton latestQueryFormData={latestQueryFormData} />
+          <DisplayApiButton latestQueryFormData={latestQueryFormData} />
           <ActionButton
             icon={<i className="fa fa-file-code-o" />}
             text=".JSON"
