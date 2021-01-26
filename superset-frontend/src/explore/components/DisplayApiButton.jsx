@@ -18,16 +18,19 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Popover, OverlayTrigger } from 'react-bootstrap';
+import Popover from 'src/common/components/Popover';
+import { OverlayTrigger } from 'react-bootstrap';
 import { t, buildQueryContext } from '@superset-ui/core';
 
 import CopyToClipboard from 'src/components/CopyToClipboard';
 
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/cjs/light';
 import jsSyntax from 'react-syntax-highlighter/dist/cjs/languages/hljs/javascript';
+import shSyntax from 'react-syntax-highlighter/dist/cjs/languages/hljs/shell';
 import github from 'react-syntax-highlighter/dist/cjs/styles/hljs/github';
 
 SyntaxHighlighter.registerLanguage('js', jsSyntax);
+SyntaxHighlighter.registerLanguage('sh', shSyntax);
 
 const propTypes = {
   latestQueryFormData: PropTypes.object.isRequired,
@@ -39,23 +42,21 @@ export default class DisplayApiButton extends React.PureComponent {
     this.state = {
       queryContext: {}
     }
-    this.onEnter = this.onEnter.bind(this);
+    this.updateQueryContext = this.updateQueryContext.bind(this);
   }
 
-  onEnter() {
+  updateQueryContext() {
     const queryContext = buildQueryContext(this.props.latestQueryFormData, baseQueryObject => [
       {
         ...baseQueryObject,
       },
     ]);
-    console.log('QC', queryContext);
     this.setState({ queryContext: queryContext });
   }
 
   buildInstructionCurl() {
     const basePath = window.location.origin;
     const queryContextString = JSON.stringify(this.state.queryContext).replace(/\"/g, '\\"');
-    console.log('aaaaaaa', queryContextString);
     return `curl -X POST "${basePath}/api/v1/chart/data" -H "accept: application/json" -H  "Content-Type: application/json" -d "${queryContextString}"`
   }
 
@@ -76,20 +77,24 @@ fetch('${basePath}/api/v1/chart/data', {
 .then(json => console.log(json));`
   }
 
-  renderPopover() {
+  renderPopoverContent() {
     const instructionCurl = this.buildInstructionCurl();
     const instructionJs = this.buildInstructionJs();
-    console.log('renderPopover', github);
-    let styleJs = {
+    const styleSh = {
       ...github,
       hljs: {
-        maxHeight: 300
+        maxWidth: 500,
       }
     };
-    // styleJs.hljs.maxHeight = 300;
-    // console.log(styleJs);
+    const styleJs = {
+      ...github,
+      hljs: {
+        maxWidth: 500,
+        maxHeight: 300,
+      }
+    };
     return (
-      <Popover id="display-api-popover">
+      <div id="display-api-popover" data-test="display-api-popover">
         <h3>API /chart/data</h3>
         <div>
           <div className="row">
@@ -97,9 +102,9 @@ fetch('${basePath}/api/v1/chart/data', {
           </div>
           <div className="row">
             <div className="col-sm-10">
-              <pre>
+              <SyntaxHighlighter language="sh" style={styleSh}>
                 {instructionCurl}
-              </pre>
+              </SyntaxHighlighter>
             </div>
             <div className="col-sm-2">
               <CopyToClipboard
@@ -137,24 +142,24 @@ fetch('${basePath}/api/v1/chart/data', {
             </div>
           </div>
         </div>
-      </Popover>
+      </div>
     );
   }
 
   render() {
     return (
-      <OverlayTrigger
+      <Popover
         trigger="click"
-        rootClose
+        // rootClose
         placement="left"
-        onEnter={() => this.onEnter()}
-        overlay={this.renderPopover()}
+        onClick={() => this.updateQueryContext()}
+        content={this.renderPopoverContent()}
       >
         <span className="btn btn-default btn-sm" data-test="display-api-button">
           <i className="fa fa-server" /> API
           &nbsp;
         </span>
-      </OverlayTrigger>
+      </Popover>
     );
   }
 
