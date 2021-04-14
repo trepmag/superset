@@ -18,7 +18,7 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Popover from 'src/common/components/Popover';
+import Popover from 'src/components/Popover';
 import { OverlayTrigger } from 'react-bootstrap';
 import { t, buildQueryContext } from '@superset-ui/core';
 
