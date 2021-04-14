@@ -19,7 +19,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'src/components/Popover';
-import { OverlayTrigger } from 'react-bootstrap';
 import { t, buildQueryContext } from '@superset-ui/core';
 
 import CopyToClipboard from 'src/components/CopyToClipboard';
@@ -40,29 +39,39 @@ export default class DisplayApiButton extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      queryContext: {}
-    }
+      queryContext: {},
+    };
     this.updateQueryContext = this.updateQueryContext.bind(this);
   }
 
   updateQueryContext() {
-    const queryContext = buildQueryContext(this.props.latestQueryFormData, baseQueryObject => [
-      {
-        ...baseQueryObject,
-      },
-    ]);
-    this.setState({ queryContext: queryContext });
+    const queryContext = buildQueryContext(
+      this.props.latestQueryFormData,
+      baseQueryObject => [
+        {
+          ...baseQueryObject,
+        },
+      ],
+    );
+    this.setState({ queryContext });
   }
 
   buildInstructionCurl() {
     const basePath = window.location.origin;
-    const queryContextString = JSON.stringify(this.state.queryContext).replace(/\"/g, '\\"');
-    return `curl -X POST "${basePath}/api/v1/chart/data" -H "accept: application/json" -H  "Content-Type: application/json" -d "${queryContextString}"`
+    const queryContextString = JSON.stringify(this.state.queryContext).replace(
+      /["]/g,
+      '\\"', //eslint-disable-line
+    );
+    return `curl -X POST "${basePath}/api/v1/chart/data" -H "accept: application/json" -H  "Content-Type: application/json" -d "${queryContextString}"`;
   }
 
   buildInstructionJs() {
     const basePath = window.location.origin;
-    const queryContextString = JSON.stringify(this.state.queryContext, null, 2).replace(/"([^"]+)"\:/g, '$1: ');
+    const queryContextString = JSON.stringify(
+      this.state.queryContext,
+      null,
+      2,
+    ).replace(/"([^"]+)"[:]/g, '$1:');
     return `const queryContext = ${queryContextString};
 
 fetch('${basePath}/api/v1/chart/data', {
@@ -74,7 +83,7 @@ fetch('${basePath}/api/v1/chart/data', {
   body: JSON.stringify(queryContext)
 })
 .then(response => response.json())
-.then(json => console.log(json));`
+.then(json => console.log(json));`;
   }
 
   renderPopoverContent() {
@@ -84,14 +93,14 @@ fetch('${basePath}/api/v1/chart/data', {
       ...github,
       hljs: {
         maxWidth: 500,
-      }
+      },
     };
     const styleJs = {
       ...github,
       hljs: {
         maxWidth: 500,
         maxHeight: 300,
-      }
+      },
     };
     return (
       <div id="display-api-popover" data-test="display-api-popover">
@@ -156,13 +165,11 @@ fetch('${basePath}/api/v1/chart/data', {
         content={this.renderPopoverContent()}
       >
         <span className="btn btn-default btn-sm" data-test="display-api-button">
-          <i className="fa fa-server" /> API
-          &nbsp;
+          <i className="fa fa-server" /> API &nbsp;
         </span>
       </Popover>
     );
   }
-
 }
 
 DisplayApiButton.propTypes = propTypes;
