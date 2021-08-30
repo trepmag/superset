@@ -161,7 +161,7 @@ function ChartList(props: ChartListProps) {
   const [preparingExport, setPreparingExport] = useState<boolean>(false);
 
   const { userId } = props.user;
-  const userKey = getFromLocalStorage(userId.toString(), null);
+  const userKey = userId ? getFromLocalStorage(userId.toString(), null) : null;
 
   const openChartImportModal = () => {
     showImportModal(true);
