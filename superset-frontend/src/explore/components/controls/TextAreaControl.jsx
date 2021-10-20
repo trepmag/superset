@@ -39,6 +39,7 @@ const propTypes = {
     null,
     'json',
     'html',
+    'yaml',
     'sql',
     'markdown',
     'javascript',

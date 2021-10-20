@@ -200,6 +200,7 @@ export const TextAreaEditor = AsyncAceEditor([
   'mode/markdown',
   'mode/sql',
   'mode/json',
+  'mode/yaml',
   'mode/html',
   'mode/javascript',
   'theme/textmate',
