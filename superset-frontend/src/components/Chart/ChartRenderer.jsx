@@ -251,7 +251,7 @@ class ChartRenderer extends React.Component {
         className={chartClassName}
         chartType={vizType}
         width={width}
-        height={height}
+        height={Math.max(0, height)}
         annotationData={annotationData}
         datasource={datasource}
         initialValues={initialValues}
