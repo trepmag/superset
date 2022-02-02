@@ -1,0 +1,58 @@
+@import (css) url(https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap);
+
+.dicf {
+
+  // DICF gfx charter parameters
+  --bg-color-gray-6: #FAFBFC;
+  --bg_color_white: #FFF;
+  --border-secondary-color: #EBF2FA;
+  --border-radius-small: 4px;
+
+  font-family: 'Roboto', sans-serif;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+  font-size: .875rem;
+  line-height: 1.5rem;
+  letter-spacing: 0.025rem;
+
+  background-color: var(--bg-color-gray-6);
+  .dashboard-component-tabs, #app .ant-tabs-content-holder {
+    background-color: transparent;
+  }
+
+  #app .dashboard-component-chart-holder {
+    background-color: var(--bg_color_white);
+    border: 1px solid var(--border-secondary-color);
+    border-radius: var(--border-radius-small);
+  }
+  .filter-bar-container {
+    display: none;
+  }
+
+  .filter-container label {
+    font-weight: normal;
+  }
+
+  .dashboard {
+    color: rgba(30,30,30,1);
+    .chart-header {
+      font-weight: 500;
+    }
+  }
+  .table > thead > tr > th {
+    font-size: .75rem;
+  }
+
+  #app .ant-tabs-nav {
+    margin-bottom: 1em;
+  }
+
+  &.standalone .dashboard {
+    .grid-container {
+      margin: 0;
+    }
+    .chart-header > .header-controls {
+      display: none;
+    }
+  }
+}

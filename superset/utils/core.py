@@ -83,6 +83,7 @@ from sqlalchemy import event, exc, inspect, select, Text
 from sqlalchemy.dialects.mysql import MEDIUMTEXT
 from sqlalchemy.engine import Connection, Engine
 from sqlalchemy.engine.reflection import Inspector
+from sqlalchemy.sql.sqltypes import String
 from sqlalchemy.sql.type_api import Variant
 from sqlalchemy.types import TEXT, TypeDecorator, TypeEngine
 from typing_extensions import TypedDict, TypeGuard
@@ -300,6 +301,7 @@ class ReservedUrlParameters(str, Enum):
 
     STANDALONE = "standalone"
     EDIT_MODE = "edit"
+    STYLE = "style"
 
     @staticmethod
     def is_standalone_mode() -> Optional[bool]:
@@ -308,6 +310,11 @@ class ReservedUrlParameters(str, Enum):
             standalone_param and standalone_param != "false" and standalone_param != "0"
         )
         return standalone
+
+    @staticmethod
+    def get_style() -> Optional[str]:
+        style = request.args.get(ReservedUrlParameters.STYLE.value)
+        return style
 
 
 class RowLevelSecurityFilterType(str, Enum):

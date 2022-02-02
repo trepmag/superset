@@ -17,6 +17,7 @@
  * under the License.
  */
 import './assets/stylesheets/superset.less';
+import './assets/stylesheets/unepgrid-dash/index.less';
 
 // Importing Antd under its own stylesheet to prevent unintentional theming.
 import './assets/stylesheets/antd/index.less';

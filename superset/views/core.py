@@ -2025,6 +2025,12 @@ class Superset(BaseSupersetView):  # pylint: disable=too-many-public-methods
         )
 
         standalone_mode = ReservedUrlParameters.is_standalone_mode()
+        style = ReservedUrlParameters.get_style()
+        body_classes_list = []
+        if standalone_mode:
+            body_classes_list.append("standalone")
+        if style:
+            body_classes_list.append(style)
 
         add_extra_log_payload(
             dashboard_id=dashboard.id,
@@ -2045,6 +2051,7 @@ class Superset(BaseSupersetView):  # pylint: disable=too-many-public-methods
                 bootstrap_data, default=utils.pessimistic_json_iso_dttm_ser
             ),
             standalone_mode=standalone_mode,
+            body_classes=" ".join(body_classes_list),
         )
 
     @has_access

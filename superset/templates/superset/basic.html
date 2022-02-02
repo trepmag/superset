@@ -64,7 +64,7 @@
     >
   </head>
 
-  <body {% if standalone_mode %}class="standalone"{% endif %}>
+  <body {% if body_classes %}class="{{ body_classes }}"{% endif %}>
     {% block navbar %}
       {% if not standalone_mode %}
         {% include 'appbuilder/navbar.html' %}

@@ -346,7 +346,7 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
   return (
     <StyledDiv>
       {nativeFiltersEnabled && !editMode && (
-        <FiltersPanel>
+        <FiltersPanel className="filter-bar-container">
           <StickyPanel ref={containerRef} width={filterBarWidth}>
             <ErrorBoundary>
               <FilterBar
