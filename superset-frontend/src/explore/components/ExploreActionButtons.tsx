@@ -26,6 +26,7 @@ import copyTextToClipboard from 'src/utils/copy';
 import { getChartPermalink } from 'src/utils/urlUtils';
 import withToasts from 'src/components/MessageToasts/withToasts';
 import EmbedCodeButton from './EmbedCodeButton';
+import DisplayApiButton from './DisplayApiButton';
 import { exportChart } from '../exploreUtils';
 import ExploreAdditionalActionsMenu from './ExploreAdditionalActionsMenu';
 import { ExportToCSVDropdown } from './ExportToCSVDropdown';
@@ -179,6 +180,10 @@ const ExploreActionButtons = (props: ExploreActionButtonsProps) => {
             onClick={doShareEmail}
           />
           <EmbedCodeButton
+            formData={latestQueryFormData}
+            addDangerToast={addDangerToast}
+          />
+          <DisplayApiButton
             formData={latestQueryFormData}
             addDangerToast={addDangerToast}
           />
